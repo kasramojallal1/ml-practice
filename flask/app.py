@@ -14,13 +14,14 @@ app = Flask(__name__)
 def home():
     return "Welcome to the ML Model API!"
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["GET", "POST"])
 def predict():
-    # Parse input JSON
+    if request.method == "GET":
+        return "This endpoint is for POST requests only. Use POST to make predictions."
+
+    # POST request logic
     data = request.json
     input_features = np.array(data["features"]).reshape(1, -1)
-    
-    # Make prediction
     prediction = model.predict(input_features)
     return jsonify({"prediction": int(prediction[0])})
 
